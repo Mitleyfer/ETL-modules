@@ -1,0 +1,32 @@
+logs_path: '/Users/mitleyfer/PycharmProjects/clickhouse_cluster/logs.log'
+pg_params:
+  host: '35.156.170.182'
+  database: 'pagila'
+  user: 'ch_user'
+  #password: ''
+ch_params:
+  host: '3.78.23.34'
+  port: '9000'
+  user: 'default'
+  #password: ''
+pg_queries:
+  dbtables_query: "select table_name from information_schema.tables where table_schema = 'public' and table_type = 'BASE TABLE';"
+  table_schema_query: "select column_name, data_type from information_schema.columns where table_name = '{name}';"
+ch_queries:
+  dbtables_query: "show tables from stg"
+  create_table_query: "create table stg.{name} ({body}) engine = PostgreSQL('35.156.170.182:5432', 'pagila', '{name}', 'ch_user', '123', 'public');"
+types_mappings:
+  "timestamp without time zone": "DateTime64"
+  "timestamp with time zone": "DateTime64"
+  "numeric": "Float64"
+  "bytea": "String"
+  "boolean": "Bool"
+  "text": "String"
+  "date": "Date"
+  "double precision": "Float64"
+  "integer": "Int64"
+  "bigint": "Int64"
+  "smallint": "UInt16"
+  "character": "String"
+
+

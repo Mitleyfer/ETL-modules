@@ -1,0 +1,124 @@
+logs_path: '<path>/<file>.log'
+bq_creds:
+  json_creds_path: '<path>/src/<cred_file>.json'
+gr_contacts_creds:
+  extract_keys:
+    method: '<created_on_col>'
+    url: 'https://api.<method>
+    headers:
+      X-Auth-Token: "api-key <key>"
+    params:
+      query[createdOn][from]: !!python/object/apply:src.utils.dynamic_params.create_date [3, '%Y-%m-%d', False]
+      query[createdOn][to]: !!python/object/apply:src.utils.dynamic_params.create_date [1, '%Y-%m-%d', True]
+      perPage: 1000
+      page: 1
+  transform_keys:
+    json_key: ''
+    separator: '_'
+    created_on_col: '<created_on_col>'
+  load_keys:
+    date_col: '<date_col>'
+    primary_key: '<primary_key>'
+    partition_col: '<partition_col>'
+    sharding_date: ''
+    bq_region: '<region>'
+    bq_writing_mode: '<MODE>'
+    by_date_del: 'N'
+    in_clause_del: 'Y'
+    delete_by_date: "delete from `<project>.<dataset>.<table>` where <col>>='{start_date}'"
+    delete_by_condition: "delete from `<project>.<dataset>.<table>` where <col> in {arr}"
+    bq_table: '<project>.<dataset>.<table>'
+gr_unsubscription_creds:
+  extract_keys:
+    method: '<method>'
+    url: 'https://api.<method>'
+    headers:
+      X-Auth-Token: "api-key <key>"
+    params:
+      sort[createdOn]: 'ASC'
+      perPage: 1000
+      page: 1
+    json:
+      subscribersType:
+        - removed
+      sectionLogicOperator: 'and'
+      section:
+          customDate:
+            from: !!python/object/apply:src.utils.dynamic_params.create_date [3, '%Y-%m-%d', False]
+            to: !!python/object/apply:src.utils.dynamic_params.create_date [1, '%Y-%m-%d', True]
+          campaignIdsList:
+            - id1
+            - id2
+          logicOperator: 'and'
+          subscriberCycle:
+            - receiving_autoresponder
+            - not_receiving_autoresponder
+          subscriptionDate: 'custom'
+  transform_keys:
+    json_key: ''
+    separator: '_'
+    created_on_col: '<created_on_col>'
+  load_keys:
+    date_col: '<date_col>'
+    primary_key: '<primary_key>'
+    partition_col: '<partition_col>'
+    sharding_date: ''
+    bq_region: '<region>'
+    bq_writing_mode: '<MODE>'
+    by_date_del: 'N'
+    in_clause_del: 'Y'
+    delete_by_date: "delete from `<project>.<dataset>.<table>` where <col>>='{start_date}'"
+    delete_by_condition: "delete from `<project>.<dataset>.<table>` where <col> in {arr}"
+    bq_table: '<project>.<dataset>.<table>'
+zd_tickets_creds:
+  extract_keys:
+    method: '<method>'
+    url: 'https://<domen>.<method>?page=1'
+    headers:
+      Authorization: 'Bearer <token>'
+      Content-Type: 'application/json'
+    params:
+      query: !!python/object/apply:src.utils.dynamic_params.create_zd_query ['type:<type>>={start_date} <col><{finish_date}', 3, '%Y-%m-%d', False, 1, '%Y-%m-%d', True]
+  transform_keys:
+    json_key: '<json_key>'
+    separator: '_'
+    created_on_col: '<created_on_col>'
+  load_keys:
+    date_col: '<date_col>'
+    primary_key: '<primary_key>'
+    partition_col: '<partition_col>'
+    sharding_date: ''
+    bq_region: '<region>'
+    bq_writing_mode: '<MODE>'
+    by_date_del: 'N'
+    in_clause_del: 'Y'
+    delete_by_date: "delete from `<project>.<dataset>.<table>` where <col>>='{start_date}'"
+    delete_by_condition: "delete from `<project>.<dataset>.<table>` where <col> in {arr}"
+    bq_table: '<project>.<dataset>.<table>'
+pw_logs_creds:
+  extract_keys:
+    method: '<method>'
+    url: 'https://api.<method>'
+    headers:
+      Authorization: "Key <token>"
+    json:
+      date_from: !!python/object/apply:src.utils.dynamic_params.create_date [3, '%Y-%m-%d', False]
+      date_to: !!python/object/apply:src.utils.dynamic_params.create_date [1, '%Y-%m-%d', True]
+      limit: 10000
+      pagination_token: ''
+  transform_keys:
+    json_key: '<key>'
+    separator: '_'
+    created_on_col: '<col>'
+  load_keys:
+    date_col: '<date_col>'
+    primary_key: '<primary_key>'
+    partition_col: '<partition_col>'
+    sharding_date: ''
+    bq_region: '<region>'
+    bq_writing_mode: '<MODE>'
+    by_date_del: 'Y'
+    in_clause_del: 'N'
+    delete_by_date: "delete from `<project>.<dataset>.<table>` where <col>>='{start_date}'"
+    delete_by_condition: "delete from `<project>.<dataset>.<table>` where <col> in {arr}"
+    bq_table: '<project>.<dataset>.<table>'
