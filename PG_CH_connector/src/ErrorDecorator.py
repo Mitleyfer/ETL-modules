@@ -2,7 +2,7 @@ import sys
 import yaml
 import logging
 
-with open('/Users/mitleyfer/PycharmProjects/clickhouse_cluster/config.yaml', 'r') as file:
+with open('/<path>/config.yaml', 'r') as file:
     credentials = yaml.safe_load(file)
 
 logging.basicConfig(
